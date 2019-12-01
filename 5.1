@@ -1,0 +1,86 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TranspositionWithNoKey
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            #region Объявления
+            // введённый пользователем текст, с которым нужно работать
+            string textEnteredByUser;
+            // количество столбцов в таблице для шифрования
+            int columnsNumber,
+            // режим работы приложения - зашифровать/расшифровать
+                mode;
+            #endregion
+
+            #region Интерфейс
+            Console.Write("Введите текст> ");
+            textEnteredByUser = Console.ReadLine().ToUpper();
+            while (true)
+            {
+                Console.Write("Введите количество столбцов в таблице> ");
+                if (int.TryParse(Console.ReadLine().Trim(), out columnsNumber) &&
+                    columnsNumber > 1)
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("****************************");
+                    Console.WriteLine("ОШИБКА! Некорректные данные.");
+                    Console.WriteLine("****************************");
+                }
+            }
+            while (true)
+            {
+                Console.WriteLine("Выберите режим:");
+                Console.WriteLine("1 - зашифровать");
+                Console.WriteLine("2 - расшифровать");
+                Console.Write("Ваш выбор> ");
+                if (int.TryParse(Console.ReadLine().Trim(), out mode) &&
+                    (mode == 1 || mode == 2))
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("****************************");
+                    Console.WriteLine("ОШИБКА! Некорректные данные.");
+                    Console.WriteLine("****************************");
+                }
+            }
+            #endregion
+
+            #region Шифрование и отображение результатов
+            switch (mode)
+            {
+                case 1:
+                    {
+                        Console.WriteLine();
+                        Console.Write("Зашифрованный текст: ");
+                        Console.WriteLine(Transposition.Encode(textEnteredByUser, columnsNumber));
+                        break;
+                    }
+                case 2:
+                    {
+                        Console.WriteLine();
+                        Console.Write("Расшифрованный текст: ");
+                        Console.WriteLine(Transposition.Decode(textEnteredByUser, columnsNumber));
+                        break;
+                    }
+            }
+            #endregion
+
+            // не закрыавем консоль до нажатия кнопки "Enter"
+            Console.WriteLine();
+            Console.Write("Нажмите 'Enter' для выхода...");
+            Console.ReadLine();
+        }
+    }
+}
