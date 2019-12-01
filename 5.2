@@ -1,0 +1,92 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TranspositionWithNoKey
+{
+    static class Transposition
+    {
+        //**********************************
+        // метод для зашифровывания текста
+        //**********************************
+        // принимаемые параметры:
+        // - 'textToEncode' - текст, который
+        //   будет зашифрован в результате
+        //   работы метода
+        // - 'columnNumber' - количество
+        //   стобцов в таблице, с помощью
+        //   которой будет зашифрован текст
+        //   методом простой перестановки
+        //**********************************
+        public static string Encode(string textToEncode, int columnsNumber)
+        {
+            // зашифрованный текст
+            string encodedText = "";
+            // длина блока для шифрования (число блоков = число столбцов)
+            int blockLength;
+            // дополняем строку текста необходимым числом пробелов,
+            // если в исходном состоянии она не разбивается на целое
+            // число блоков
+            while (textToEncode.Length % columnsNumber != 0)
+            {
+                textToEncode += " ";
+            }
+            // вычисляем длину блока, на которые будет разбита
+            // строка текста при зашифровывании
+            blockLength = textToEncode.Length / columnsNumber;
+            // выделяем блоки текста и записываем в результирующую строку
+            for (int blockIndex = 0; blockIndex < columnsNumber; blockIndex++)
+            {
+                for (int symbolIndexInBlock = 0; symbolIndexInBlock < blockLength; symbolIndexInBlock++)
+                {
+                    encodedText += textToEncode[symbolIndexInBlock * columnsNumber + blockIndex];
+                }
+            }
+            // возвращаем результат работы метода
+            return encodedText.Trim();
+        }
+
+        //**********************************
+        // метод для расшифровывания текста
+        //**********************************
+        // принимаемые параметры:
+        // - 'textToDecode' - текст, который
+        //   будет расшифрован в результате
+        //   работы метода
+        // - 'columnNumber' - количество
+        //   стобцов в таблице, с помощью
+        //   которой был зашифрован текст
+        //   методом простой перестановки
+        //**********************************
+        public static string Decode(string textToDecode, int columnsNumber)
+        {
+            // зашифрованный текст
+            string decodedText = "";
+            // длина блока для шифрования
+            int blockLength;
+            // дополняем строку текста необходимым числом пробелов,
+            // если в исходном состоянии она не разбивается на целое
+            // число блоков, длина которых обусловлена значением
+            // параметра 'columnNumber'
+            while (textToDecode.Length % columnsNumber != 0)
+            {
+                textToDecode += " ";
+            }
+            // вычисляем длину блока, на которые будет разбита
+            // строка текста при расшифровывании
+            blockLength = textToDecode.Length / columnsNumber;
+            // выделяем блоки текста и записываем в результирующую строку
+            for (int symbolIndexInBlock = 0; symbolIndexInBlock < blockLength; symbolIndexInBlock++)
+            {
+                for (int blockIndex = 0; blockIndex < columnsNumber; blockIndex++)
+                {
+                    decodedText += textToDecode[blockIndex * blockLength + symbolIndexInBlock];
+                }
+            }
+            // возвращаем результат работы метода
+            return decodedText.Trim();
+        }
+    }
+}
