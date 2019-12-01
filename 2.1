@@ -1,0 +1,123 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Diagnostics;
+
+namespace cSharp
+{
+    class Program
+    {
+        static int partition(int[] A, int start, int end)
+        {
+            int pivot = A[(start + end) / 2];
+            int i = start;
+            int j = end;
+
+            while (i <= j)
+            {
+                while (A[i] < pivot)
+                    i++;
+                while (A[j] > pivot)
+                    j--;
+                if (i <= j)
+                {
+                    int temp = A[i];
+                    A[i] = A[j];
+                    A[j] = temp;
+
+                    i++;
+                    j--;
+                }
+            }
+
+            return i;
+        }
+
+        static void qSort(int[] A, int start, int end)
+        {
+            if (start < end)
+            {
+                int temp = partition(A, start, end);
+
+                qSort(A, start, temp - 1);
+                qSort(A, temp, end);
+            }
+        }
+
+        static void print(int[] A)
+        {
+            for (int i = 0; i < A.Length; ++i)
+                Console.Write("{0} ", A[i]);
+            Console.WriteLine();
+        }
+
+        static void Main(string[] args)
+        {
+            int t, amount;
+            double hard;
+            Console.WriteLine("Лабораторная работа 2.1 Быстрая сортировка Хоара");
+            Console.Write("Введите количество элементов массива ==> ");
+            amount = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Тип ввода: 1 - автоматический ввод; 2 - ручной ввод ==> ");
+            t = Convert.ToInt32(Console.ReadLine());
+            if (t == 1)
+            {
+                Random rnd = new Random();
+                int n = amount;
+                int[] A = new int[n];
+
+                for (int i = 0; i < n; ++i)
+                    A[i] = rnd.Next(-amount, amount);
+                Console.WriteLine();
+                Console.Write("Исходный массив: ");
+                print(A);
+                Stopwatch sWatch = new Stopwatch();
+                sWatch.Start();
+                qSort(A, 0, A.Length - 1);
+                sWatch.Stop();
+                Console.Write("Отсортированный массив: ");
+                print(A);
+                hard = (n * Math.Log(n, 2));
+                Console.WriteLine("Трудоёмкость алгоритма: " + hard);
+                Console.WriteLine("Скорость выполнения алгоритма: " + sWatch.Elapsed.ToString());
+                Console.WriteLine("Нажмите Enter для выхода");
+                System.Console.ReadKey();
+            }
+            else
+            {
+                if (t == 2)
+                {
+                    Random rnd = new Random();
+                    int n = amount;
+                    int[] A = new int[n];
+
+                    for (int i = 0; i < n; ++i)
+                        A[i] = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("Исходный массив: ");
+                    print(A);
+                    Stopwatch sWatch = new Stopwatch();
+                    sWatch.Start();
+                    qSort(A, 0, A.Length - 1);
+                    sWatch.Stop();
+                    Console.Write("Отсортированный массив: ");
+                    print(A);
+                    hard = (n * Math.Log(n, 2));
+                    Console.WriteLine("Трудоёмкость алгоритма: " + hard);
+                    Console.WriteLine("Скорость выполнения алгоритма: " + sWatch.Elapsed.ToString());
+                    Console.WriteLine("Нажмите Enter для выхода");
+                    System.Console.ReadKey();
+                }
+                else
+                {
+                    Console.WriteLine("Вы ввели неверный тип");
+                    Console.WriteLine("Нажмите Enter для выхода");
+                    System.Console.ReadKey();
+                }
+            }
+        }
+        
+    }
+}
