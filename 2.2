@@ -1,0 +1,101 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Diagnostics;
+
+namespace ConsoleApp2
+{
+    class Program
+    {
+        static int[] BubbleSort(int[] mas)
+        {
+            int temp;
+            for (int i = 0; i<mas.Length; i++)
+            {
+                for (int j = i + 1; j<mas.Length; j++)
+                {
+                    if (mas[i] > mas[j])
+                    {
+                        temp = mas[i];
+                        mas[i] = mas[j];
+                        mas[j] = temp;
+                    }
+}            
+            }
+            return mas;
+        }
+        static void print(int[] A)
+        {
+            for (int i = 0; i < A.Length; ++i)
+                Console.Write("{0} ", A[i]);
+            Console.WriteLine();
+        }
+        static void Main(string[] args)
+        {
+            int t, amount;
+            double hard;
+            Console.WriteLine("Лабораторная работа 2.2 Сортировка пузырьком");
+            Console.Write("Введите количество элементов массива ==> ");
+            amount = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Тип ввода: 1 - автоматический ввод; 2 - ручной ввод ==> ");
+            t = Convert.ToInt32(Console.ReadLine());
+            if (t == 1)
+            {
+                Random rnd = new Random();
+                int n = amount;
+                int[] A = new int[n];
+
+                for (int i = 0; i < n; ++i)
+                    A[i] = rnd.Next(-100, 100);
+                Console.WriteLine();
+                Console.Write("Исходный массив: ");
+                print(A);
+                Stopwatch sWatch = new Stopwatch();
+                sWatch.Start();
+                BubbleSort(A);
+                sWatch.Stop();
+                Console.Write("Отсортированный массив: ");
+                print(A);
+                hard = (n * n);
+                Console.WriteLine("Трудоёмкость алгоритма: " + hard);
+                Console.WriteLine("Скорость выполнения алгоритма: " + sWatch.Elapsed.ToString());
+                Console.WriteLine("Нажмите Enter для выхода");
+                System.Console.ReadKey();
+            }
+            else
+            {
+                if (t == 2)
+                {
+                    Random rnd = new Random();
+                    int n = amount;
+                    int[] A = new int[n];
+
+                    for (int i = 0; i < n; ++i)
+                        A[i] = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine();
+                    Console.Write("Исходный массив: ");
+                    print(A);
+                    Stopwatch sWatch = new Stopwatch();
+                    sWatch.Start();
+                    BubbleSort(A);
+                    sWatch.Stop();
+                    Console.Write("Отсортированный массив: ");
+                    print(A);
+                    hard = (n * n);
+                    Console.WriteLine("Трудоёмкость алгоритма: " + hard);
+                    Console.WriteLine("Скорость выполнения алгоритма: " + sWatch.Elapsed.ToString());
+                    Console.WriteLine("Нажмите Enter для выхода");
+                    System.Console.ReadKey();
+                }
+                else
+                {
+                    Console.WriteLine("Вы ввели неверный тип");
+                    Console.WriteLine("Нажмите Enter для выхода");
+                    System.Console.ReadKey();
+                }
+            }
+        }
+    }
+}
