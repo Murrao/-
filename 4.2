@@ -1,0 +1,138 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TranspositionWithKey
+{
+    static class Transposition
+    {
+        // ключ шифрования
+        private static string key = "";
+
+        public static void SetKey(string keyString)
+        {
+            // в поле класса копируем переданный ключ посимвольно, 
+            // а не делаем ссылку на тот же объект -
+            // это делается в целях защиты от возможного
+            // воздействия на ключевую строку за пределами
+            // этого класса уже после передачи значения сюда
+            foreach (char sybmol in keyString)
+            {
+                key += sybmol;
+            }
+        }
+
+        //**********************************
+        // метод для зашифровывания текста
+        //**********************************
+        // принимаемые параметры:
+        // - 'textToEncode' - текст, который
+        //   будет зашифрован в результате
+        //   работы метода
+        //**********************************
+        public static string Encode(string textToEncode)
+        {
+            // словарь для блоков текста вместе с ключом шифрования в изначальном порядке
+            Dictionary<char, string> originalBlockOrder = new Dictionary<char, string>();
+            // словарь для блоков текста после перестановки по ключу
+            SortedDictionary<char, string> finalBlockOrder = null;
+            // длина блока для шифрования (число блоков = число столбцов)
+            int blockLength;
+            // блок шифруемого текста
+            string block = "";
+            // зашифрованный текст
+            string encodedText = "";
+            // дополняем строку текста необходимым числом пробелов,
+            // если в исходном состоянии она не разбивается на целое
+            // число блоков
+            while (textToEncode.Length % key.Length != 0)
+            {
+                textToEncode += " ";
+            }
+            // вычисляем длину блока, на которые будет разбита
+            // строка текста при зашифровывании
+            blockLength = textToEncode.Length / key.Length;
+            // выделяем блоки текста и записываем в словарь
+            for (int blockIndex = 0; blockIndex < key.Length; blockIndex++)
+            {
+                block = "";
+                for (int symbolIndexInBlock = 0; symbolIndexInBlock < blockLength; symbolIndexInBlock++)
+                {
+                    block += textToEncode[symbolIndexInBlock * key.Length + blockIndex];
+                }
+                originalBlockOrder.Add(key[blockIndex], block);
+            }
+            // переставляем блоки текста
+            finalBlockOrder = new SortedDictionary<char, string>(originalBlockOrder);
+            // записываем переставленные блоки в строку
+            foreach (char keySymbol in finalBlockOrder.Keys)
+            {
+                encodedText += finalBlockOrder[keySymbol];
+            }
+            // возвращаем результат работы метода
+            return encodedText.Trim();
+        }
+
+        //**********************************
+        // метод для расшифровывания текста
+        //**********************************
+        // принимаемые параметры:
+        // - 'textToDecode' - текст, который
+        //   будет расшифрован в результате
+        //   работы метода
+        //**********************************
+        public static string Decode(string textToDecode)
+        {
+            // словарь для блоков текста вместе с ключом шифрования в изначальном порядке
+            Dictionary<char, string> encodedBlockOrder = new Dictionary<char, string>();
+            // ключ в отсортированном виде
+            char[] sortedKey = key.ToCharArray();
+            Array.Sort(sortedKey);
+            // длина блока для шифрования (число блоков = число столбцов)
+            int blockLength;
+            // блок шифруемого текста
+            string block = "";
+            // зашифрованный текст
+            string encodedText = "";
+            // расшифрованный текст
+            string decodedText = "";
+            // дополняем строку текста необходимым числом пробелов,
+            // если в исходном состоянии она не разбивается на целое
+            // число блоков
+            while (textToDecode.Length % key.Length != 0)
+            {
+                textToDecode += " ";
+            }
+            // вычисляем длину блока, на которые будет разбита
+            // строка текста при зашифровывании
+            blockLength = textToDecode.Length / key.Length;
+            // выделяем блоки текста и записываем в словарь
+            for (int blockIndex = 0; blockIndex < key.Length; blockIndex++)
+            {
+                block = "";
+                for (int symbolIndexInBlock = 0; symbolIndexInBlock < blockLength; symbolIndexInBlock++)
+                {
+                    block += textToDecode[symbolIndexInBlock + blockIndex * blockLength];
+                }
+                encodedBlockOrder.Add(sortedKey[blockIndex], block);
+            }
+            // записываем переставленные блоки в строку
+            foreach (char keySymbol in key.ToCharArray())
+            {
+                encodedText += encodedBlockOrder[keySymbol];
+            }
+            // выделяем блоки текста и записываем в итоговую строку
+            for (int blockIndex = 0; blockIndex < blockLength; blockIndex++)
+            {
+                for (int symbolIndexInBlock = 0; symbolIndexInBlock < key.Length; symbolIndexInBlock++)
+                {
+                    decodedText += encodedText[blockIndex + symbolIndexInBlock * blockLength];
+                }
+            }
+            // возвращаем результат работы метода
+            return decodedText.Trim();
+        }
+    }
+}
